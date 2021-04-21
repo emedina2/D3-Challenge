@@ -1,14 +1,14 @@
 // @TODO: YOUR CODE HERE
 
 // svg params
-var svgHeight = window.innerHeight-100;
-var svgWidth = window.innerWidth-100;
+var svgHeight = 600;
+var svgWidth = 800;
 // margins
 var margin = {
 top: 50,
 right: 50,
-bottom: 50,
-left: 50
+bottom: 100,
+left: 75
 };
 // chart area minus margins
 var chartHeight = svgHeight - margin.top - margin.bottom;
@@ -38,10 +38,17 @@ d3.csv("./assets/data/data.csv").then(function(healthData) {
         values.ageMoe = +values.ageMoe
         values.income = +values.income
         values.incomeMoe = +values.incomeMoe
+         // healthcare,healthcareLow,healthcareHigh
+        // obesity,obesityLow,obesityHigh
+        // smokes,smokesLow,smokesHigh
     
     });
     var povertyXScale = d3.scaleLinear()
     .domain(d3.extent(healthData, d =>d.poverty))
+    .range([0 , chartWidth]);
+    
+    var incomeXScale = d3.scaleLinear()
+    .domain(d3.extent(healthData, d =>d.income))
     .range([0 , chartWidth]);
     
 
@@ -62,13 +69,35 @@ d3.csv("./assets/data/data.csv").then(function(healthData) {
     chartGroup.append("g").attr("transform", `translate(0, ${chartHeight})`).call(bottomAxis);
     // Add leftAxis to the left side of the display
     chartGroup.append("g").call(leftAxis);
-    // // Add rightAxis to the right side of the display
-    // chartGroup.append("g").attr("transform", `translate(${chartWidth}, 0)`).call(povertyXScale);
+   
+    //add Axis titles
 
-    
-  
-    // healthcare,healthcareLow,healthcareHigh
-    // obesity,obesityLow,obesityHigh
-    // smokes,smokesLow,smokesHigh
+    //x Axis
+    chartGroup.append("text")
+    .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + 50})`)
+    .attr("text-anchor", "middle")
+    .attr("font-size", "16px")
+    .attr("fill", "blue")
+    .text("Poverty %");
+    // y axis
+    chartGroup.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", -50)
+    .attr("x", -(chartHeight / 2))
+    .attr("dy", "1em")
+    .attr("text-anchor", "middle")
+    .attr("font-size", "16px")
+    .attr("fill", "red")
+    .text("Age");
+
+    var povertyXageY = chartGroup.selectAll("circle")
+        .data(healthData)
+        .enter()
+        .append("circle")
+        .attr("cx", d=> povertyXScale(d.poverty))
+        .attr("cy", d=> ageYScale(d.age))
+        .attr("r", 10)
+        .attr("fill", "pink")
+
 
 });
