@@ -53,7 +53,7 @@ d3.csv("./assets/data/data.csv").then(function(healthData) {
     
 
     var ageYScale = d3.scaleLinear()
-    .domain([0,d3.max(healthData, d => d.age)])
+    .domain(d3.extent(healthData, d => d.age))
     .range([chartHeight, 0]);
 
     console.log(d3.max(healthData, d=> d.poverty))
@@ -76,28 +76,42 @@ d3.csv("./assets/data/data.csv").then(function(healthData) {
     chartGroup.append("text")
     .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + 50})`)
     .attr("text-anchor", "middle")
-    .attr("font-size", "16px")
-    .attr("fill", "blue")
-    .text("Poverty %");
+    .attr("font-size", "24px")
+    .attr("fill", "Black")
+    .text("Poverty (%)");
     // y axis
     chartGroup.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("y", -50)
+    .attr("y", -60)
     .attr("x", -(chartHeight / 2))
     .attr("dy", "1em")
     .attr("text-anchor", "middle")
-    .attr("font-size", "16px")
-    .attr("fill", "red")
+    .attr("font-size", "24px")
+    .attr("fill", "Black")
     .text("Age");
 
     var povertyXageY = chartGroup.selectAll("circle")
         .data(healthData)
         .enter()
         .append("circle")
-        .attr("cx", d=> povertyXScale(d.poverty))
-        .attr("cy", d=> ageYScale(d.age))
-        .attr("r", 10)
-        .attr("fill", "pink")
+            .attr("cx", d=> povertyXScale(d.poverty))
+            .attr("cy", d=> ageYScale(d.age))
+            .attr("r", 10)
+            .attr("fill", "pink");
+    // add state abbr to circles
+    var states = chartGroup.selectAll("text")
+        .data(healthData)
+        .enter()
+        .append("text")
+        .attr("dx", d=> povertyXScale(d.poverty))
+        .attr("dy", d=> ageYScale(d.age)+4)
+        .attr("stroke", "black")
+        .attr("font-size", "10px")
+        .style("text-anchor", "middle")
+        .text(d=> d.abbr);
+    
 
 
-});
+}).catch(function(error) {
+    console.log(error);
+    });
