@@ -89,7 +89,7 @@ d3.csv("./assets/data/data.csv").then(function(healthData) {
     .attr("font-size", "24px")
     .attr("fill", "Black")
     .text("Age");
-
+    //add circles to chart
     var povertyXageY = chartGroup.selectAll("circle")
         .data(healthData)
         .enter()
@@ -103,12 +103,12 @@ d3.csv("./assets/data/data.csv").then(function(healthData) {
         .data(healthData)
         .enter()
         .append("text")
+        .text(d=> d.abbr)
         .attr("dx", d=> povertyXScale(d.poverty))
         .attr("dy", d=> ageYScale(d.age)+4)
-        .attr("stroke", "black")
+        .attr("stroke", "white")
         .attr("font-size", "10px")
-        .style("text-anchor", "middle")
-        .text(d=> d.abbr);
+        .style("text-anchor", "middle");
     
 
 
