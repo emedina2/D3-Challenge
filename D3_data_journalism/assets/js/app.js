@@ -98,8 +98,10 @@ d3.csv("./assets/data/data.csv").then(function(healthData) {
             .attr("cy", d=> ageYScale(d.age))
             .attr("r", 10)
             .attr("fill", "pink");
+
     // add state abbr to circles
-    var states = chartGroup.selectAll("text")
+    var states = chartGroup.append("g")
+        .selectAll("text")
         .data(healthData)
         .enter()
         .append("text")
@@ -110,7 +112,7 @@ d3.csv("./assets/data/data.csv").then(function(healthData) {
         .attr("font-size", "10px")
         .style("text-anchor", "middle");
     
-
+console.log(healthData)
 
 }).catch(function(error) {
     console.log(error);
